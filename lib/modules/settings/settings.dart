@@ -1,0 +1,1 @@
+export 'view/settingas_view.dart';
