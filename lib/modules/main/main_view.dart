@@ -1,44 +1,34 @@
 import 'package:finance_app/components/components.dart';
 import 'package:finance_app/modules/modules.dart';
-import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
 
-class MainView extends StatelessWidget {
+import 'main_destinations.dart';
+
+class MainView extends StatefulWidget {
   const MainView({super.key});
+
+  @override
+  State<MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
+  int _selectedIndex = 0;
+
+  static const _tabs = [
+    HomeView(),
+    Center(child: Text('Transactions')),
+    Center(child: Text('Add')),
+    SettingasView(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Finance Tracker'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingasView()),
-              );
-            },
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(AppSizing.defaultPadding),
-        child: Column(
-          children: [
-            Text('Hello, World!'),
-            PrimaryButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddTransactionView()),
-                );
-              },
-              text: 'Добавить транзакцию',
-            ),
-          ],
-        ),
+      body: IndexedStack(index: _selectedIndex, children: _tabs),
+      bottomNavigationBar: AppBottomNav(
+        destinations: mainBottomNavDestinations,
+        currentIndex: _selectedIndex,
+        onTap: (index) => setState(() => _selectedIndex = index),
       ),
     );
   }

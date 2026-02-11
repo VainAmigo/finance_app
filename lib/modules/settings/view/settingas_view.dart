@@ -62,9 +62,10 @@ class SettingasView extends StatelessWidget {
                   backgroundColor: previewColor,
                   radius: 20,
                 ),
-                title: Text(palette.label, style: TextStyle(
-                  color: colorScheme.onSurface,
-                ),),
+                title: Text(
+                  palette.label,
+                  style: TextStyle(color: colorScheme.onSurface),
+                ),
                 trailing: isSelected
                     ? Icon(Icons.check_circle, color: colorScheme.primary)
                     : null,
@@ -114,7 +115,7 @@ class _SectionTitle extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.onSecondary,
         ),
       ),
     );

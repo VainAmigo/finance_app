@@ -82,7 +82,7 @@ class AppThemes {
       onPrimary: Color(0xFFFFFFFF),
       surface: Color(0xFFF0F4F8),
       onSurface: Color(0xFF2D3748),
-      secondary: Color(0xFFE5EAEF), 
+      secondary: Color(0xFFE5EFF9), 
       onSecondary: Color(0xFFB1BAC7),
       tertiary: Color(0xFF3BC9DB),
     ),
