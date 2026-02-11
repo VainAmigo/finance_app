@@ -37,6 +37,7 @@ class PrimaryButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
+        elevation: 0,
         minimumSize: Size(fullWidth ? screenWidth : 0, size.height),
         padding: size.paddingWith(paddingStyle),
         shape: RoundedRectangleBorder(

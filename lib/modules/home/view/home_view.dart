@@ -1,4 +1,4 @@
-import 'package:finance_app/modules/analytic/widgets/gradient_line_chart.dart';
+import 'package:finance_app/components/components.dart';
 import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';

@@ -1,13 +1,21 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-/// Диаграмма (по умолчанию):
-/// - max(values) → верх контейнера
-/// - min(values) → minYFactor (нижняя граница области диаграммы)
+/// How to use
+/// 1. Create a list of values
+/// SizedBox(
+///   height: height * 0.6,
+///   width: double.infinity,
+///   child: CustomPaint(
+///     painter: StaticLineChartPainter(
+///       values: values,
+///       minYFactor: 0.3,
+///       gradientColor: colorScheme.tertiary,
+///     ),
+///   ),
+/// ),
 class StaticLineChartPainter extends CustomPainter {
   final List<double> values;
-  /// Доля высоты контейнера, на которой заканчивается область диаграммы (minValue).
-  /// 0.6 = 60% от верха — нижняя граница графика.
   final double minYFactor;
   final Color gradientColor;
 
