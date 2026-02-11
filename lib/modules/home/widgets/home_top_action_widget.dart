@@ -57,7 +57,6 @@ class HomeTopActionWidget extends StatelessWidget {
           const SizedBox(height: AppSizing.spaceBtwElementsExtra),
           AmountWithSignWidget(
             amount: 120586.00,
-            sign: '¢',
             preset: AmountTextPreset.large,
           ),
         ],

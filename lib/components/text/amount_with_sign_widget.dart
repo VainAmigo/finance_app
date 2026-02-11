@@ -1,64 +1,105 @@
 import 'package:finance_app/core/core.dart';
+import 'package:finance_app/models/models.dart';
 import 'package:flutter/material.dart';
 
 /// Виджет для отображения суммы с разным цветом для целой и дробной части.
 ///
 /// Целая часть отображается белым (onSurface), дробная часть и символ
 /// валюты — серым (onSecondary).
+///
+/// Если [currency] задан — используется [CurrencyFormatter] и [currency.symbol].
+/// Иначе при наличии [CurrencyScope] берётся валюта из scope.
+/// Если нет scope — используются [sign] и [AmountFormatter] с [decimalPlaces].
 class AmountWithSignWidget extends StatelessWidget {
   const AmountWithSignWidget({
     super.key,
     required this.amount,
-    required this.sign,
+    this.sign,
+    this.currency,
     this.preset = AmountTextPreset.large,
     this.decimalPlaces = 2,
   });
 
   final double amount;
-  final String sign;
+
+  /// Символ валюты (используется, если нет [currency] и нет [CurrencyScope]).
+  final String? sign;
+
+  /// Явная валюта (приоритет над [CurrencyScope]).
+  final Currency? currency;
 
   /// Пресет размера текста.
   final AmountTextPreset preset;
 
-  /// Количество знаков после запятой.
+  /// Количество знаков после запятой (только при отсутствии currency).
   final int decimalPlaces;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final formatted = AmountFormatter.formatWithParts(
-      amount,
-      decimalPlaces: decimalPlaces,
-    );
+    final effectiveCurrency = currency ?? _currencyFromScope(context);
+
+    final FormattedAmount formatted;
+    final String symbol;
+    final bool symbolBeforeNumber;
+
+    if (effectiveCurrency != null) {
+      final formatter = CurrencyFormatter(effectiveCurrency);
+      formatted = formatter.formatWithParts(amount);
+      symbol = effectiveCurrency.symbol;
+      symbolBeforeNumber = effectiveCurrency.symbolPosition ==
+              SymbolPosition.left ||
+          effectiveCurrency.symbolPosition == SymbolPosition.leftWithSpace;
+    } else {
+      formatted = AmountFormatter.formatWithParts(
+        amount,
+        decimalPlaces: decimalPlaces,
+      );
+      symbol = sign ?? '';
+      symbolBeforeNumber = false;
+    }
 
     final fontSize = amountTextSize(preset);
     final decimalFontSize = amountDecimalTextSize(preset);
 
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: formatted.integerPart,
-            style: TextStyle(
-              color: colorScheme.onSurface,
-              fontFamily: theme.textTheme.bodyLarge?.fontFamily,
-              fontSize: fontSize,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          TextSpan(
-            text: '${formatted.decimalPart}$sign',
-            style: TextStyle(
-              color: colorScheme.onSecondary,
-              fontFamily: theme.textTheme.bodyLarge?.fontFamily,
-              fontSize: decimalFontSize,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
+    final secondaryStyle = TextStyle(
+      color: colorScheme.onSecondary,
+      fontFamily: theme.textTheme.bodyLarge?.fontFamily,
+      fontSize: decimalFontSize,
+      fontWeight: FontWeight.w400,
     );
+
+    final primaryStyle = TextStyle(
+      color: colorScheme.onSurface,
+      fontFamily: theme.textTheme.bodyLarge?.fontFamily,
+      fontSize: fontSize,
+      fontWeight: FontWeight.w600,
+    );
+
+    final children = <TextSpan>[];
+    final addSpaceBeforeSymbol = effectiveCurrency?.symbolPosition ==
+        SymbolPosition.rightWithSpace;
+    final addSpaceAfterSymbol = effectiveCurrency?.symbolPosition ==
+        SymbolPosition.leftWithSpace;
+
+    if (symbolBeforeNumber && symbol.isNotEmpty) {
+      final prefix = addSpaceAfterSymbol ? '$symbol ' : symbol;
+      children.add(TextSpan(text: prefix, style: secondaryStyle));
+    }
+    children.add(TextSpan(text: formatted.integerPart, style: primaryStyle));
+    final suffix = symbolBeforeNumber
+        ? formatted.decimalPart
+        : '${formatted.decimalPart}${addSpaceBeforeSymbol ? ' ' : ''}$symbol';
+    children.add(TextSpan(text: suffix, style: secondaryStyle));
+
+    return RichText(
+      text: TextSpan(children: children),
+    );
+  }
+
+  Currency? _currencyFromScope(BuildContext context) {
+    return CurrencyScope.maybeOf(context)?.currency;
   }
 
   /// Пресеты размеров текста для отображения сумм.

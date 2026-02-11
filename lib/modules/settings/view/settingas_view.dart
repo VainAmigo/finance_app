@@ -1,4 +1,5 @@
 import 'package:finance_app/components/components.dart';
+import 'package:finance_app/modules/settings/widgets/settings_currency_widget.dart';
 import 'package:finance_app/modules/settings/widgets/settings_theme_widget.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,12 @@ class SettingasView extends StatelessWidget {
                     'Currency and formats',
                     Icons.attach_money,
                     isLast: true,
+                    onTap: () {
+                      AppBottomSheet.showFittedModalBottomSheet(
+                        context,
+                        child: const SettingsCurrencyWidget(),
+                      );
+                    },
                   ),
                 ],
               ),

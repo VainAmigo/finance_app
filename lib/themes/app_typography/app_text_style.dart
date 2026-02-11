@@ -42,8 +42,17 @@ class AppTextStyles {
     final theme = Theme.of(context);
     return TextStyle(
       fontSize: 16,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: color ?? theme.colorScheme.onSurface,
+    );
+  }
+
+  static TextStyle listTileSubtitle(BuildContext context, {Color? color}) {
+    final theme = Theme.of(context);
+    return TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: color ?? theme.colorScheme.onSecondary,
     );
   }
 

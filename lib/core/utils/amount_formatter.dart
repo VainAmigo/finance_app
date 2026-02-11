@@ -1,3 +1,5 @@
+import 'package:finance_app/models/models.dart';
+
 /// Утилита для форматирования денежных сумм.
 class AmountFormatter {
   AmountFormatter._();
@@ -90,4 +92,95 @@ class FormattedAmount {
 
   /// Полная строка суммы.
   String get full => '$integerPart$decimalPart';
+}
+
+/// Форматтер сумм с учётом настроек валюты.
+class CurrencyFormatter {
+  CurrencyFormatter(this.currency);
+
+  final Currency currency;
+
+  /// Форматирует сумму согласно настройкам валюты.
+  String format(double amount) {
+    final rounded = amount.toStringAsFixed(currency.decimalPlaces);
+    final parts = rounded.split('.');
+
+    final intPart = parts[0];
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < intPart.length; i++) {
+      if (i > 0 && (intPart.length - i) % 3 == 0) {
+        buffer.write(_getThousandsSeparator());
+      }
+      buffer.write(intPart[i]);
+    }
+
+    String formattedNumber = buffer.toString();
+    if (currency.decimalPlaces > 0) {
+      formattedNumber += _getDecimalSeparator() + parts[1];
+    }
+
+    switch (currency.symbolPosition) {
+      case SymbolPosition.left:
+        return '${currency.symbol}$formattedNumber';
+      case SymbolPosition.leftWithSpace:
+        return '${currency.symbol} $formattedNumber';
+      case SymbolPosition.right:
+        return '$formattedNumber${currency.symbol}';
+      case SymbolPosition.rightWithSpace:
+        return '$formattedNumber ${currency.symbol}';
+    }
+  }
+
+  /// Форматирует сумму с разбиением на целую и дробную части (без символа валюты).
+  FormattedAmount formatWithParts(double amount) {
+    final rounded = amount.toStringAsFixed(currency.decimalPlaces);
+    final parts = rounded.split('.');
+
+    final intPart = parts[0];
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < intPart.length; i++) {
+      if (i > 0 && (intPart.length - i) % 3 == 0) {
+        buffer.write(_getThousandsSeparator());
+      }
+      buffer.write(intPart[i]);
+    }
+
+    final integerPart = buffer.toString();
+    final decimalPart = currency.decimalPlaces > 0
+        ? _getDecimalSeparator() + parts[1]
+        : '';
+
+    return FormattedAmount(
+      integerPart: integerPart,
+      decimalPart: decimalPart,
+    );
+  }
+
+  /// Парсит отформатированную строку в число.
+  double parse(String formattedValue) {
+    String cleanValue = formattedValue.replaceAll(currency.symbol, '').trim();
+    cleanValue = cleanValue.replaceAll(_getThousandsSeparator(), '');
+    if (_getDecimalSeparator() != '.') {
+      cleanValue = cleanValue.replaceAll(_getDecimalSeparator(), '.');
+    }
+    return double.tryParse(cleanValue) ?? 0.0;
+  }
+
+  String _getThousandsSeparator() {
+    return switch (currency.thousandsSeparator) {
+      ThousandsSeparator.comma => ',',
+      ThousandsSeparator.point => '.',
+      ThousandsSeparator.space => ' ',
+      ThousandsSeparator.none => '',
+    };
+  }
+
+  String _getDecimalSeparator() {
+    return switch (currency.decimalSeparator) {
+      DecimalSeparator.comma => ',',
+      DecimalSeparator.point => '.',
+    };
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:finance_app/core/core.dart';
+import 'package:finance_app/models/models.dart';
 import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   AppThemeState _themeState = const AppThemeState();
+  Currency _currency = Currency.availableCurrencies.first;
 
   void _setThemeState(AppThemeState Function(AppThemeState) update) {
     setState(() => _themeState = update(_themeState));
@@ -33,15 +36,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return AppThemeScope(
-      state: _themeState,
-      setState: _setThemeState,
-      child: MaterialApp(
-        title: 'Finance Tracker',
-        theme: AppThemes.themeFor(_themeState.palette, Brightness.light),
-        darkTheme: AppThemes.themeFor(_themeState.palette, Brightness.dark),
-        themeMode: _themeMode,
-        home: const MainView(),
+    return CurrencyScope(
+      currency: _currency,
+      setCurrency: (c) => setState(() => _currency = c),
+      child: AppThemeScope(
+        state: _themeState,
+        setState: _setThemeState,
+        child: MaterialApp(
+          title: 'Finance Tracker',
+          theme: AppThemes.themeFor(_themeState.palette, Brightness.light),
+          darkTheme: AppThemes.themeFor(_themeState.palette, Brightness.dark),
+          themeMode: _themeMode,
+          home: const MainView(),
+        ),
       ),
     );
   }
