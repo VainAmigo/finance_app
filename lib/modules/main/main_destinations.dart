@@ -16,7 +16,7 @@ final mainBottomNavDestinations = [
   const BottomNavDestination(
     icon: Icons.add_circle_outline,
     selectedIcon: Icons.add_circle_rounded,
-    label: 'Добавить',
+    label: 'Аналитика',
   ),
   const BottomNavDestination(
     icon: Icons.settings_outlined,
