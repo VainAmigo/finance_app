@@ -5,44 +5,174 @@ class PrimaryButton extends StatelessWidget {
     required this.text,
     this.onPressed,
     super.key,
-    this.color,
+    this.backgroundColor,
     this.foregroundColor,
-    this.child,
+    this.icon,
+    this.size = PrimaryButtonSize.medium,
+    this.paddingStyle = PrimaryButtonPaddingStyle.regular,
+    this.fullWidth = true,
+    this.rounded = false,
+    this.iconOnly = false,
   });
 
-  final String text;
   final void Function()? onPressed;
-  final Color? color;
+  final String text;
+  final IconData? icon;
+  final Color? backgroundColor;
   final Color? foregroundColor;
-  final Widget? child;
+  final PrimaryButtonSize size;
+  final PrimaryButtonPaddingStyle paddingStyle;
+  final bool fullWidth;
+  final bool rounded;
+  final bool iconOnly;
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDisabled = onPressed == null;
+
+    final textColor = foregroundColor ?? colorScheme.onPrimary;
+    final buttonColor = backgroundColor ?? colorScheme.primary;
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        fixedSize: Size(MediaQuery.of(context).size.width, 50),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        foregroundColor: foregroundColor ?? Colors.white,
-        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        backgroundColor: color ?? Colors.amber,
-        disabledBackgroundColor: Colors.amber.withValues(alpha: 0.3),
-        disabledForegroundColor: Colors.white,
+        minimumSize: Size(fullWidth ? screenWidth : 0, size.height),
+        padding: size.paddingWith(paddingStyle),
+        shape: RoundedRectangleBorder(
+          borderRadius: rounded
+              ? BorderRadius.circular(100)
+              : BorderRadius.circular(size.borderRadius),
+        ),
+        foregroundColor: textColor,
+        backgroundColor: buttonColor,
+        disabledBackgroundColor: buttonColor.withValues(alpha: 0.3),
       ),
       onPressed: onPressed,
-      child: child ?? Text(text),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(
+              icon,
+              size: size.iconSize,
+              color: isDisabled ? textColor.withValues(alpha: 0.5) : textColor,
+            ),
+            if (!iconOnly) SizedBox(width: size.iconPadding),
+          ],
+          if (!iconOnly)
+            Text(
+              text,
+              style: TextStyle(
+                color: isDisabled
+                    ? textColor.withValues(alpha: 0.5)
+                    : textColor,
+                fontSize: size.fontSize,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
 
-class CenteredProgressingButton extends StatelessWidget {
-  const CenteredProgressingButton(this.color, {super.key});
+enum PrimaryButtonSize { xSmall, small, medium, large }
 
-  final Color? color;
+enum PrimaryButtonPaddingStyle { slim, regular }
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(color: color ?? Colors.white),
-    );
+extension on PrimaryButtonSize {
+  double get height {
+    switch (this) {
+      case PrimaryButtonSize.xSmall:
+        return 32;
+      case PrimaryButtonSize.small:
+        return 40;
+      case PrimaryButtonSize.medium:
+        return 56;
+      case PrimaryButtonSize.large:
+        return 96;
+    }
+  }
+
+  double get iconSize {
+    switch (this) {
+      case PrimaryButtonSize.xSmall:
+        return 20;
+      case PrimaryButtonSize.small:
+        return 20;
+      case PrimaryButtonSize.medium:
+        return 24;
+      case PrimaryButtonSize.large:
+        return 32;
+    }
+  }
+
+  double get iconPadding {
+    switch (this) {
+      case PrimaryButtonSize.xSmall:
+        return 4;
+      case PrimaryButtonSize.small:
+        return 8;
+      case PrimaryButtonSize.medium:
+        return 8;
+      case PrimaryButtonSize.large:
+        return 12;
+    }
+  }
+
+  double get borderRadius {
+    switch (this) {
+      case PrimaryButtonSize.xSmall:
+        return 8;
+      case PrimaryButtonSize.small:
+        return 8;
+      case PrimaryButtonSize.medium:
+        return 12;
+      case PrimaryButtonSize.large:
+        return 16;
+    }
+  }
+
+  double get fontSize {
+    switch (this) {
+      case PrimaryButtonSize.xSmall:
+        return 12;
+      case PrimaryButtonSize.small:
+        return 14;
+      case PrimaryButtonSize.medium:
+        return 16;
+      case PrimaryButtonSize.large:
+        return 20;
+    }
+  }
+
+  EdgeInsets paddingWith(PrimaryButtonPaddingStyle style) {
+    switch (style) {
+      case PrimaryButtonPaddingStyle.slim:
+        switch (this) {
+          case PrimaryButtonSize.xSmall:
+            return const EdgeInsets.symmetric(horizontal: 3, vertical: 2);
+          case PrimaryButtonSize.small:
+            return const EdgeInsets.symmetric(horizontal: 6, vertical: 2);
+          case PrimaryButtonSize.medium:
+            return const EdgeInsets.symmetric(horizontal: 8, vertical: 6);
+          case PrimaryButtonSize.large:
+            return const EdgeInsets.symmetric(horizontal: 14, vertical: 6);
+        }
+      case PrimaryButtonPaddingStyle.regular:
+        switch (this) {
+          case PrimaryButtonSize.xSmall:
+            return const EdgeInsets.symmetric(horizontal: 12, vertical: 4);
+          case PrimaryButtonSize.small:
+            return const EdgeInsets.symmetric(horizontal: 16, vertical: 4);
+          case PrimaryButtonSize.medium:
+            return const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
+          case PrimaryButtonSize.large:
+            return const EdgeInsets.symmetric(horizontal: 48, vertical: 12);
+        }
+    }
   }
 }
