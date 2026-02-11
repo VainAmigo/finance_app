@@ -1,3 +1,4 @@
+import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -6,30 +7,44 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(title: const Text('Главная')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppSizing.defaultPadding),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.home_rounded,
-                  size: 64,
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                automaticallyImplyLeading: false,
+                floating: false,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                expandedHeight: height * 0.7,
+                collapsedHeight: height * 0.15,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: const HomeTopActionWidget(),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  'Главная',
-                  style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 200,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
-              ],
-            ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: AppSizing.spaceBtwElements),
+                  child: Container(
+                    height: 600,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
+      )
     );
   }
 }
