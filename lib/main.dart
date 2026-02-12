@@ -1,6 +1,5 @@
 import 'package:finance_app/l10n/l10.dart';
-import 'package:finance_app/modules/modules.dart';
-import 'package:finance_app/themes/themes.dart';
+import 'package:finance_app/presentation/presentaion.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
