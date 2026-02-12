@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:finance_app/data/models/user_model.dart';
 
 /// Источник данных Firebase Auth + Firestore для пользователей.
@@ -42,26 +43,53 @@ class FirebaseUserDatasource {
     });
   }
 
-  /// Регистрация по email.
-  Future<User> signUpWithEmail(String email, String password) async {
-    final cred = await _auth.createUserWithEmailAndPassword(
+  /// Вход по email и паролю.
+  Future<User> signInWithEmail(String email, String password) async {
+    final result = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
-    return cred.user!;
+    return result.user!;
   }
 
-  /// Вход по email.
-  Future<User> signInWithEmail(String email, String password) async {
-    final cred = await _auth.signInWithEmailAndPassword(
+  /// Регистрация по email и паролю.
+  Future<User> signUpWithEmail(
+    String email,
+    String password, {
+    String? displayName,
+  }) async {
+    final result = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-    return cred.user!;
+    final user = result.user!;
+    if (displayName != null && displayName.isNotEmpty) {
+      await user.updateDisplayName(displayName);
+      await user.reload();
+      return _auth.currentUser!;
+    }
+    return user;
+  }
+
+  /// Вход через Google.
+  Future<User> signInWithGoogle() async {
+    final googleSignIn = GoogleSignIn();
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) throw Exception('Google sign-in cancelled');
+
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final result = await _auth.signInWithCredential(credential);
+    return result.user!;
   }
 
   /// Выход.
   Future<void> signOut() async {
+    await GoogleSignIn().signOut();
     await _auth.signOut();
   }
 

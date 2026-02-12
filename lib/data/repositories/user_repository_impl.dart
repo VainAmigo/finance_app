@@ -45,6 +45,62 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<UserEntity> signInWithGoogle() async {
+    final fbUser = await _datasource.signInWithGoogle();
+
+    final userModel = UserModel(
+      id: fbUser.uid,
+      email: fbUser.email ?? '',
+      displayName: fbUser.displayName,
+      photoUrl: fbUser.photoURL,
+      createdAt: DateTime.now(),
+    );
+    await _datasource.setUser(userModel);
+
+    return _mapper.toEntity(userModel);
+  }
+
+  @override
+  Future<UserEntity> signInWithEmail(String email, String password) async {
+    final fbUser = await _datasource.signInWithEmail(email, password);
+
+    final userModel = UserModel(
+      id: fbUser.uid,
+      email: fbUser.email ?? '',
+      displayName: fbUser.displayName,
+      photoUrl: fbUser.photoURL,
+      createdAt: DateTime.now(),
+    );
+    await _datasource.setUser(userModel);
+
+    return _mapper.toEntity(userModel);
+  }
+
+  @override
+  Future<UserEntity> signUpWithEmail(
+    String email,
+    String password, {
+    String? displayName,
+  }) async {
+    final fbUser = await _datasource.signUpWithEmail(
+      email,
+      password,
+      displayName: displayName,
+    );
+
+    final userModel = UserModel(
+      id: fbUser.uid,
+      email: fbUser.email ?? '',
+      displayName: fbUser.displayName ?? displayName,
+      photoUrl: fbUser.photoURL,
+      createdAt: DateTime.now(),
+    );
+    await _datasource.setUser(userModel);
+
+    return _mapper.toEntity(userModel);
+  }
+
+  @override
   Stream<UserEntity?> watchCurrentUser() {
     return _datasource.watchAuthState().asyncMap((fbUser) async {
       if (fbUser == null) return null;

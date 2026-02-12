@@ -1,6 +1,6 @@
-
 import 'package:finance_app/presentation/presentaion.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingasView extends StatelessWidget {
   const SettingasView({super.key});
@@ -60,6 +60,22 @@ class SettingasView extends StatelessWidget {
                         child: const SettingsCurrencyWidget(),
                       );
                     },
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSizing.spaceBtwElements),
+
+              TitledSection(
+                title: 'Account',
+                children: [
+                  _buildSettingsList(
+                    context,
+                    'Sign out',
+                    Icons.logout,
+                    isFirst: true,
+                    isLast: true,
+                    onTap: () =>
+                        context.read<AuthCubit>().signOut(),
                   ),
                 ],
               ),
