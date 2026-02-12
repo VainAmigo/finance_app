@@ -1,13 +1,15 @@
+import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsAppThemeModeWidget extends StatelessWidget {
   const SettingsAppThemeModeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeScope = AppThemeScope.of(context);
-    final state = themeScope.state;
+    final themeProvider = context.watch<ThemeProvider>();
+    final state = themeProvider.state;
     final palettes = AppPalette.values;
     final segmentCount = palettes.length;
 
@@ -30,7 +32,7 @@ class SettingsAppThemeModeWidget extends StatelessWidget {
             child: _ColorBlock(
               color: blockColor,
               isSelected: isSelected,
-              onTap: () => themeScope.setState((s) => s.copyWith(palette: palette)),
+              onTap: () => themeProvider.setState((s) => s.copyWith(palette: palette)),
             ),
           ),
         );

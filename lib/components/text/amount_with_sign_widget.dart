@@ -1,6 +1,8 @@
 import 'package:finance_app/core/core.dart';
 import 'package:finance_app/models/models.dart';
+import 'package:finance_app/modules/modules.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Виджет для отображения суммы с разным цветом для целой и дробной части.
 ///
@@ -8,8 +10,8 @@ import 'package:flutter/material.dart';
 /// валюты — серым (onSecondary).
 ///
 /// Если [currency] задан — используется [CurrencyFormatter] и [currency.symbol].
-/// Иначе при наличии [CurrencyScope] берётся валюта из scope.
-/// Если нет scope — используются [sign] и [AmountFormatter] с [decimalPlaces].
+/// Иначе при наличии [CurrencyProvider] берётся валюта из провайдера.
+/// Если нет провайдера — используются [sign] и [AmountFormatter] с [decimalPlaces].
 class AmountWithSignWidget extends StatelessWidget {
   const AmountWithSignWidget({
     super.key,
@@ -22,10 +24,10 @@ class AmountWithSignWidget extends StatelessWidget {
 
   final double amount;
 
-  /// Символ валюты (используется, если нет [currency] и нет [CurrencyScope]).
+  /// Символ валюты (используется, если нет [currency] и нет [CurrencyProvider]).
   final String? sign;
 
-  /// Явная валюта (приоритет над [CurrencyScope]).
+  /// Явная валюта (приоритет над [CurrencyProvider]).
   final Currency? currency;
 
   /// Пресет размера текста.
@@ -38,7 +40,7 @@ class AmountWithSignWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final effectiveCurrency = currency ?? _currencyFromScope(context);
+    final effectiveCurrency = currency ?? _currencyFromContext(context);
 
     final FormattedAmount formatted;
     final String symbol;
@@ -98,8 +100,12 @@ class AmountWithSignWidget extends StatelessWidget {
     );
   }
 
-  Currency? _currencyFromScope(BuildContext context) {
-    return CurrencyScope.maybeOf(context)?.currency;
+  Currency? _currencyFromContext(BuildContext context) {
+    try {
+      return context.watch<CurrencyProvider>().currency;
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Пресеты размеров текста для отображения сумм.

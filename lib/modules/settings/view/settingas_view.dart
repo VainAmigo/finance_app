@@ -1,5 +1,6 @@
 import 'package:finance_app/components/components.dart';
 import 'package:finance_app/modules/settings/widgets/settings_currency_widget.dart';
+import 'package:finance_app/modules/settings/widgets/settings_locale_widget.dart';
 import 'package:finance_app/modules/settings/widgets/settings_theme_widget.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,17 @@ class SettingasView extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: AppSizing.spaceBtwElementsExtra),
-                  _buildSettingsList(context, 'Language', Icons.language),
+                  _buildSettingsList(
+                    context,
+                    'Language',
+                    Icons.language,
+                    onTap: () {
+                      AppBottomSheet.showFittedModalBottomSheet(
+                        context,
+                        child: const SettingsLocaleWidget(),
+                      );
+                    },
+                  ),
                   const SizedBox(height: AppSizing.spaceBtwElementsExtra),
                   _buildSettingsList(
                     context,

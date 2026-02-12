@@ -1,55 +1,49 @@
-import 'package:finance_app/core/core.dart';
-import 'package:finance_app/models/models.dart';
+import 'package:finance_app/l10n/l10.dart';
 import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const AppView());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  AppThemeState _themeState = const AppThemeState();
-  Currency _currency = Currency.availableCurrencies.first;
-
-  void _setThemeState(AppThemeState Function(AppThemeState) update) {
-    setState(() => _themeState = update(_themeState));
-  }
-
-  ThemeMode get _themeMode {
-    switch (_themeState.themeMode) {
-      case AppThemeMode.system:
-        return ThemeMode.system;
-      case AppThemeMode.light:
-        return ThemeMode.light;
-      case AppThemeMode.dark:
-        return ThemeMode.dark;
-    }
-  }
+class AppView extends StatelessWidget {
+  const AppView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CurrencyScope(
-      currency: _currency,
-      setCurrency: (c) => setState(() => _currency = c),
-      child: AppThemeScope(
-        state: _themeState,
-        setState: _setThemeState,
-        child: MaterialApp(
-          title: 'Finance Tracker',
-          theme: AppThemes.themeFor(_themeState.palette, Brightness.light),
-          darkTheme: AppThemes.themeFor(_themeState.palette, Brightness.dark),
-          themeMode: _themeMode,
-          home: const MainView(),
-        ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => CurrencyProvider()),
+      ],
+      child: const FinanceApp(),
+    );
+  }
+}
+
+class FinanceApp extends StatelessWidget {
+  const FinanceApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
+
+    return MaterialApp(
+      title: 'Finance Tracker',
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: localeProvider.locale,
+      theme: AppThemes.themeFor(themeProvider.state.palette, Brightness.light),
+      darkTheme: AppThemes.themeFor(
+        themeProvider.state.palette,
+        Brightness.dark,
       ),
+      themeMode: themeProvider.themeMode,
+      home: const MainView(),
     );
   }
 }

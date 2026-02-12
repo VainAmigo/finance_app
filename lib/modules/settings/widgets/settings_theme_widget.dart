@@ -22,7 +22,6 @@ class SettingsThemeWidget extends StatelessWidget {
         children: [
           ModalSheetTitleWidget(
             title: 'App Theme',
-            subtitle: 'Choose your preferred app theme',
           ),
           const SizedBox(height: AppSizing.spaceBtwSections),
           TitledSection(

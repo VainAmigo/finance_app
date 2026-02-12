@@ -1,7 +1,8 @@
 import 'package:finance_app/components/components.dart';
+import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/app_theme/app_theme_mode.dart';
-import 'package:finance_app/themes/app_theme/theme_scope.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Виджет выбора режима темы для раздела настроек.
 class SettingsThemeModeWidget extends StatelessWidget {
@@ -27,13 +28,13 @@ class SettingsThemeModeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scope = AppThemeScope.of(context);
+    final themeProvider = context.watch<ThemeProvider>();
 
     return SegmentedControl<AppThemeMode>(
       segments: _segments,
-      selectedValue: scope.state.themeMode,
+      selectedValue: themeProvider.state.themeMode,
       onChanged: (mode) {
-        scope.setState((s) => s.copyWith(themeMode: mode));
+        themeProvider.setState((s) => s.copyWith(themeMode: mode));
       },
     );
   }

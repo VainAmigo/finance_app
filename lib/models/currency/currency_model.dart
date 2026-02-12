@@ -24,6 +24,14 @@ class Currency {
     required this.name,
   });
 
+  /// Найти валюту по коду.
+  static Currency fromCode(String code) {
+    return availableCurrencies.firstWhere(
+      (c) => c.code == code,
+      orElse: () => availableCurrencies.first,
+    );
+  }
+
   static const List<Currency> availableCurrencies = [
     Currency(
       code: 'USD',

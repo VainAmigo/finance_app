@@ -1,19 +1,18 @@
 import 'package:finance_app/components/components.dart';
-import 'package:finance_app/core/core.dart';
-import 'package:finance_app/models/models.dart';
+import 'package:finance_app/l10n/l10.dart';
 import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-/// Содержимое модального окна настроек валюты и форматов.
-class SettingsCurrencyWidget extends StatelessWidget {
-  const SettingsCurrencyWidget({super.key});
+/// Содержимое модального окна выбора языка.
+class SettingsLocaleWidget extends StatelessWidget {
+  const SettingsLocaleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final currencyProvider = context.watch<CurrencyProvider>();
-    final currentCurrency = currencyProvider.currency;
+    final localeProvider = context.watch<LocaleProvider>();
+    final currentCode = localeProvider.currentLanguageCode;
 
     return Container(
       padding: const EdgeInsets.only(
@@ -27,18 +26,18 @@ class SettingsCurrencyWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ModalSheetTitleWidget(
-            title: 'Currency and formats',
-            subtitle: 'Select your currency and number format',
+            title: 'Language',
           ),
           const SizedBox(height: AppSizing.spaceBtwSections),
           Column(
             children: [
-              ...Currency.availableCurrencies.asMap().entries.map((entry) {
+              ...AppLocalizationHelper.locales.asMap().entries.map((entry) {
                 final index = entry.key;
-                final currency = entry.value;
+                final locale = entry.value;
                 final isFirst = index == 0;
-                final isLast = index == Currency.availableCurrencies.length - 1;
-                final isSelected = currentCurrency.code == currency.code;
+                final isLast =
+                    index == AppLocalizationHelper.locales.length - 1;
+                final isSelected = currentCode == locale.languageCode;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -46,7 +45,7 @@ class SettingsCurrencyWidget extends StatelessWidget {
                   ),
                   child: ListTile(
                     onTap: () {
-                      currencyProvider.setCurrency(currency);
+                      localeProvider.setLocale(locale);
                       if (context.mounted) Navigator.of(context).pop();
                     },
                     shape: RoundedRectangleBorder(
@@ -66,13 +65,13 @@ class SettingsCurrencyWidget extends StatelessWidget {
                         ? Theme.of(context).colorScheme.primary
                         : Colors.transparent,
                     leading: Icon(
-                      Icons.attach_money,
+                      Icons.language,
                       color: isSelected
                           ? Theme.of(context).colorScheme.onPrimary
                           : Theme.of(context).colorScheme.onSecondary,
                     ),
                     title: Text(
-                      '${currency.symbol} ${currency.name} (${currency.code})',
+                      AppLocalizationHelper.getName(locale.languageCode),
                       style: AppTextStyles.listTileTitle(
                         context,
                         color: isSelected
@@ -81,7 +80,7 @@ class SettingsCurrencyWidget extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(
-                      _formatPreview(currency),
+                      locale.languageCode.toUpperCase(),
                       style: AppTextStyles.listTileSubtitle(context,
                         color: isSelected
                             ? Theme.of(context).colorScheme.onSurface
@@ -96,10 +95,5 @@ class SettingsCurrencyWidget extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _formatPreview(Currency currency) {
-    final formatter = CurrencyFormatter(currency);
-    return formatter.format(123456.78);
   }
 }
