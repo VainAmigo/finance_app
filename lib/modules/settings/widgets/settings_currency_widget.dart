@@ -1,6 +1,5 @@
 import 'package:finance_app/components/components.dart';
 import 'package:finance_app/core/core.dart';
-import 'package:finance_app/models/models.dart';
 import 'package:finance_app/modules/modules.dart';
 import 'package:finance_app/themes/themes.dart';
 import 'package:flutter/material.dart';

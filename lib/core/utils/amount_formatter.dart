@@ -1,4 +1,4 @@
-import 'package:finance_app/models/models.dart';
+import 'package:finance_app/modules/modules.dart';
 
 /// Утилита для форматирования денежных сумм.
 class AmountFormatter {
@@ -79,10 +79,7 @@ class AmountFormatter {
 
 /// Результат форматирования суммы с разделением на части.
 class FormattedAmount {
-  const FormattedAmount({
-    required this.integerPart,
-    required this.decimalPart,
-  });
+  const FormattedAmount({required this.integerPart, required this.decimalPart});
 
   /// Целая часть (например "120 586").
   final String integerPart;
@@ -152,10 +149,7 @@ class CurrencyFormatter {
         ? _getDecimalSeparator() + parts[1]
         : '';
 
-    return FormattedAmount(
-      integerPart: integerPart,
-      decimalPart: decimalPart,
-    );
+    return FormattedAmount(integerPart: integerPart, decimalPart: decimalPart);
   }
 
   /// Парсит отформатированную строку в число.

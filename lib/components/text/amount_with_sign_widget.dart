@@ -1,5 +1,4 @@
 import 'package:finance_app/core/core.dart';
-import 'package:finance_app/models/models.dart';
 import 'package:finance_app/modules/modules.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

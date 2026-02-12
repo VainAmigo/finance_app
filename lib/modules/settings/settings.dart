@@ -7,3 +7,4 @@ export 'widgets/settings_app_theme_mode_widget.dart';
 export 'currency_provider/currency_provider.dart';
 export 'locale_provider/locale_provider.dart';
 export 'theme_provider/theme_provider.dart';
+export 'currency_provider/currency_model.dart';
