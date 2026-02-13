@@ -1,10 +1,17 @@
+import 'package:finance_app/data/data.dart';
+import 'package:finance_app/firebase_options.dart';
 import 'package:finance_app/l10n/l10.dart';
-import 'package:finance_app/modules/modules.dart';
-import 'package:finance_app/themes/themes.dart';
+import 'package:finance_app/presentation/presentaion.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const AppView());
 }
 
@@ -13,13 +20,18 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => LocaleProvider()),
-        ChangeNotifierProvider(create: (_) => CurrencyProvider()),
-      ],
-      child: const FinanceApp(),
+    return BlocProvider(
+      create: (context) => AuthCubit(
+        userRepository: UserRepositoryImpl(),
+      ),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+          ChangeNotifierProvider(create: (_) => LocaleProvider()),
+          ChangeNotifierProvider(create: (_) => CurrencyProvider()),
+        ],
+        child: const FinanceApp(),
+      ),
     );
   }
 }
@@ -43,7 +55,7 @@ class FinanceApp extends StatelessWidget {
         Brightness.dark,
       ),
       themeMode: themeProvider.themeMode,
-      home: const MainView(),
+      home: const AuthView(),
     );
   }
 }
