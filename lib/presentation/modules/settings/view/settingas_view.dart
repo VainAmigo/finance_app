@@ -24,7 +24,7 @@ class SettingasView extends StatelessWidget {
               TitledSection(
                 title: 'App settings',
                 children: [
-                  _buildSettingsList(
+                  _buildSettingsListTile(
                     context,
                     'App Theme',
                     Icons.palette,
@@ -37,7 +37,7 @@ class SettingasView extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: AppSizing.spaceBtwElementsExtra),
-                  _buildSettingsList(
+                  _buildSettingsListTile(
                     context,
                     'Language',
                     Icons.language,
@@ -49,7 +49,7 @@ class SettingasView extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: AppSizing.spaceBtwElementsExtra),
-                  _buildSettingsList(
+                  _buildSettingsListTile(
                     context,
                     'Currency and formats',
                     Icons.attach_money,
@@ -66,38 +66,32 @@ class SettingasView extends StatelessWidget {
               const SizedBox(height: AppSizing.spaceBtwElements),
 
               TitledSection(
-                title: 'Account',
-                children: [
-                  _buildSettingsList(
-                    context,
-                    'Sign out',
-                    Icons.logout,
-                    isFirst: true,
-                    isLast: true,
-                    onTap: () =>
-                        context.read<AuthCubit>().signOut(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSizing.spaceBtwElements),
-
-              TitledSection(
                 title: 'Privacy',
                 children: [
-                  _buildSettingsList(
+                  _buildSettingsListTile(
                     context,
                     'Privacy Policy',
                     Icons.privacy_tip,
                     isFirst: true,
                   ),
                   const SizedBox(height: AppSizing.spaceBtwElementsExtra),
-                  _buildSettingsList(
+                  _buildSettingsListTile(
                     context,
                     'Security',
                     Icons.security,
                     isLast: true,
                   ),
                 ],
+              ),
+
+              const SizedBox(height: AppSizing.spaceBtwSections),
+              _buildSettingsListTile(
+                context,
+                'Sign out',
+                Icons.logout,
+                isFirst: true,
+                isLast: true,
+                onTap: () => context.read<AuthCubit>().signOut(),
               ),
             ],
           ),
@@ -106,7 +100,7 @@ class SettingasView extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsList(
+  Widget _buildSettingsListTile(
     BuildContext context,
     String title,
     IconData icon, {
