@@ -1,3 +1,4 @@
+import 'package:finance_app/presentation/presentaion.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -88,13 +89,13 @@ extension on PrimaryButtonSize {
   double get height {
     switch (this) {
       case PrimaryButtonSize.xSmall:
-        return 32;
+        return AppSizing.heightXS;
       case PrimaryButtonSize.small:
-        return 40;
+        return AppSizing.heightS;
       case PrimaryButtonSize.medium:
-        return 56;
+        return AppSizing.heightM;
       case PrimaryButtonSize.large:
-        return 96;
+        return AppSizing.heightL;
     }
   }
 
@@ -127,26 +128,26 @@ extension on PrimaryButtonSize {
   double get borderRadius {
     switch (this) {
       case PrimaryButtonSize.xSmall:
-        return 8;
+        return AppSizing.borderRadius8;
       case PrimaryButtonSize.small:
-        return 8;
+        return AppSizing.borderRadius8;
       case PrimaryButtonSize.medium:
-        return 12;
+        return AppSizing.borderRadius12;
       case PrimaryButtonSize.large:
-        return 16;
+        return AppSizing.borderRadius16;
     }
   }
 
   double get fontSize {
     switch (this) {
       case PrimaryButtonSize.xSmall:
-        return 12;
+        return AppSizing.fontSizeXS;
       case PrimaryButtonSize.small:
-        return 14;
+        return AppSizing.fontSizeS;
       case PrimaryButtonSize.medium:
-        return 16;
+        return AppSizing.fontSizeM;
       case PrimaryButtonSize.large:
-        return 20;
+        return AppSizing.fontSizeL;
     }
   }
 

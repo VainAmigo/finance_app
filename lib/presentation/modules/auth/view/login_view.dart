@@ -33,7 +33,7 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 48),
+                const SizedBox(height: AppSizing.spaceBtwSections),
                 Text(
                   'Finance Tracker',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
                       ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: AppSizing.spaceBtwSections),
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,

@@ -13,4 +13,14 @@ class AppSizing {
   static const double borderRadius12 = 12.0;
   static const double borderRadius8 = 8.0;
   static const double borderRadius4 = 4.0;
+
+  static const double heightXS = 32.0;
+  static const double heightS = 40.0;
+  static const double heightM = 56.0;
+  static const double heightL = 96.0;
+
+  static const double fontSizeXS = 12.0;
+  static const double fontSizeS = 14.0;
+  static const double fontSizeM = 16.0;
+  static const double fontSizeL = 20.0;
 }
