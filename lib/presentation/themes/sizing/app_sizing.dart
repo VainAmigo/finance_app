@@ -23,4 +23,9 @@ class AppSizing {
   static const double fontSizeS = 14.0;
   static const double fontSizeM = 16.0;
   static const double fontSizeL = 20.0;
+
+  static const double iconSizeXS = 20.0;
+  static const double iconSizeS = 20.0;
+  static const double iconSizeM = 24.0;
+  static const double iconSizeL = 32.0;
 }

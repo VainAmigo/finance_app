@@ -16,7 +16,7 @@ class _MainViewState extends State<MainView> {
 
   static const _tabs = [
     HomeView(),
-    Center(child: Text('Transactions')),
+    AddTransactionView(),
     AnalyticView(),
     SettingasView(),
   ];

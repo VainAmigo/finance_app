@@ -102,13 +102,13 @@ extension on PrimaryButtonSize {
   double get iconSize {
     switch (this) {
       case PrimaryButtonSize.xSmall:
-        return 20;
+        return AppSizing.iconSizeXS;
       case PrimaryButtonSize.small:
-        return 20;
+        return AppSizing.iconSizeS;
       case PrimaryButtonSize.medium:
-        return 24;
+        return AppSizing.iconSizeM;
       case PrimaryButtonSize.large:
-        return 32;
+        return AppSizing.iconSizeL;
     }
   }
 

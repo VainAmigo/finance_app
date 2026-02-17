@@ -1,4 +1,4 @@
-import 'package:finance_app/presentation/modules/modules.dart';
+import 'package:finance_app/presentation/presentaion.dart';
 
 /// Утилита для форматирования денежных сумм.
 class AmountFormatter {
