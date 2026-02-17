@@ -55,7 +55,8 @@ class FinanceApp extends StatelessWidget {
         Brightness.dark,
       ),
       themeMode: themeProvider.themeMode,
-      home: const AuthView(),
+      initialRoute: AppRouter.auth,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }

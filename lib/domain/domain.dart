@@ -4,6 +4,4 @@
 
 export 'entities/entity.dart';
 export 'entities/user_entity.dart';
-export 'entities/transaction_entity.dart';
 export 'repositories/user_repository.dart';
-export 'repositories/transaction_repository.dart';

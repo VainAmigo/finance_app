@@ -44,7 +44,9 @@ class HomeTopActionWidget extends StatelessWidget {
               PrimaryButton(
                 text: 'Deposit',
                 icon: Icons.add,
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).pushNamed(
+                  AppRouter.addTransaction,
+                ),
                 size: PrimaryButtonSize.medium,
                 paddingStyle: PrimaryButtonPaddingStyle.slim,
                 rounded: true,

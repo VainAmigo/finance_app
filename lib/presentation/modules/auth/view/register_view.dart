@@ -33,7 +33,10 @@ class _RegisterViewState extends State<RegisterView> {
       listenWhen: (prev, curr) => curr is AuthAuthenticated,
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            AppRouter.main,
+            (route) => false,
+          );
         }
       },
       child: Scaffold(

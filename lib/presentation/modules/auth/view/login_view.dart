@@ -195,10 +195,8 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 const SizedBox(height: 32),
                 TextButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const RegisterView(),
-                    ),
+                  onPressed: () => Navigator.of(context).pushNamed(
+                    AppRouter.register,
                   ),
                   child: const Text('Нет аккаунта? Зарегистрироваться'),
                 ),
