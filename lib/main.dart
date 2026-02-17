@@ -9,9 +9,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const AppView());
 }
 
@@ -20,10 +18,18 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthCubit(
-        userRepository: UserRepositoryImpl(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthCubit(userRepository: UserRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (context) => CategoriesCubit(
+            categoryRepository: CategoryRepositoryImpl(),
+            subCategoryRepository: SubCategoryRepositoryImpl(),
+          ),
+        ),
+      ],
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => ThemeProvider()),

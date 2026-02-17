@@ -1,3 +1,4 @@
+import 'package:finance_app/domain/domain.dart';
 import 'package:finance_app/presentation/components/components.dart';
 import 'package:finance_app/presentation/modules/settings/settings.dart';
 import 'package:finance_app/presentation/modules/transaction/widgets/add_transaction_action_widget.dart';
@@ -119,5 +120,3 @@ class _AddTransactionViewState extends State<AddTransactionView> {
     });
   }
 }
-
-enum TransactionType { income, expense }
